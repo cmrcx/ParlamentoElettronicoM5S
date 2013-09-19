@@ -954,6 +954,7 @@ return {
 ["[not displayed public]"] = "[non pubblico]";
 ["a bit unsatisfied"] = "un po' insoddisfatto";
 ["abandoned"] = "abbandonato";
+["action"] = false;
 ["activated"] = "attivato";
 ["and #{count} more initiatives"] = "ed altre #{count} proposte";
 ["and one more initiative"] = "ed un altra proposta";
