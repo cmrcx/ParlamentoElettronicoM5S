@@ -692,6 +692,7 @@ return {
 ["Registration (step 2 of 3: Personal information)"] = "Registrazione (Passo 2 di 3: Informazioni personali)";
 ["Registration (step 3 of 3: Terms of use and password)"] = "Registrazione (Passo 3 di 3: Termini d'uso e password)";
 ["Rejected"] = "Rifiutato";
+["Remaining contacts"] = false;
 ["Remove"] = "Rimuovi";
 ["Remove from contacts"] = "Rimuovi dai contatti";
 ["Remove initiator"] = "Rimuovi autore";

@@ -3,7 +3,22 @@ Here you can learn,
 - what this member says about him- or herself,
 - which areas he or she is a member of,
 - in which issues and initiatives he or she participates
-- which delegations the member has received and given, and
 - which contacts the member has published.
+
 =add to contacts=
 You can add this member to your list of contacts (and also remove him or her from it, again, of course). Please note that you can only delegate to members, who are on your list of contacts.
+
+=Units and areas=
+Here you can see, in which units the member has voting right and to which areas in these units the member is subscribed.
+
+=Last events=
+Shows what the member has done in the last time.
+
+=Open issues=
+Shows open issues, on which the member participates in any way.
+
+=Closed issues=
+Shows closed issues, on which the member participated in any way.
+
+=Contacts=
+Shows the contacts of the member. However only those contacts will be displayed, which the member has set to public.

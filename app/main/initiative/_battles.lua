@@ -1,9 +1,5 @@
 local initiative = param.get("initiative", "table")
 
-if not initiative.issue.closed then
-  return
-end
-
 local battled_initiatives = Initiative:new_selector()
   :add_field("winning_battle.count", "winning_count")
   :add_field("losing_battle.count", "losing_count")
@@ -12,13 +8,13 @@ local battled_initiatives = Initiative:new_selector()
   :add_order_by("rank")
   :exec()
 
-
 local number_of_initiatives = Initiative:new_selector()
   :add_where{ "issue_id = ?", initiative.issue_id }
   :add_where("admitted")
   :count()
 
 if number_of_initiatives > 1 then
+
   ui.list{
     records = battled_initiatives,
     columns = {
@@ -43,6 +39,7 @@ if number_of_initiatives > 1 then
         end
       },
       {
+        field_attr = { style = "text-align:right" },
         content = function(record)
           slot.put(record.winning_count)
         end
@@ -59,7 +56,7 @@ if number_of_initiatives > 1 then
         end
       },
       {
-        field_attr = { style = "text-align: right;" },
+        field_attr = { style = "text-align:right" },
         content = function(record)
           slot.put(record.losing_count)
         end
@@ -91,4 +88,5 @@ if number_of_initiatives > 1 then
       }
     }
   }
+
 end

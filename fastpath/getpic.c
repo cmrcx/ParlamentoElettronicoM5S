@@ -8,11 +8,11 @@
 #include <unistd.h>
 
 #ifndef GETPIC_CONNINFO
-#define GETPIC_CONNINFO "dbname=liquid_feedback"
+#define GETPIC_CONNINFO "dbname=parlamento_elettronico_m5s"
 #endif
 
 #ifndef GETPIC_DEFAULT_AVATAR
-#define GETPIC_DEFAULT_AVATAR "/opt/liquid_feedback_testing/app/static/avatar.jpg"
+#define GETPIC_DEFAULT_AVATAR "/opt/ParlamentoElettronicoM5S/ParlamentoElettronicoM5S/static/avatar.jpg"
 #endif
 
 int main(int argc, const char * const *argv) {

@@ -1,4 +1,4 @@
-PATH:=$(PATH):/opt/rocketwiki/
+PATH:=$(PATH):/opt/ParlamentoElettronicoM5S/rocketwiki-lqfb
 
 DIRS = help
 HTML_SOURCE := $(foreach DIR,$(DIRS),$(wildcard $(DIR)/*.txt))

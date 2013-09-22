@@ -1,9 +1,25 @@
 =Profilseite=
+
 Hier kann man erfahren,
 - was dieses Mitglied über sich selbst mitteilt,
 - in welchen Themenbereichen es Mitglied ist,
 - an welchen Themen und Initiativen es sich beteiligt
-- welche Delegationen das Mitglied erhalten und erteilt und
 - welche Kontakte das Mitglied veröffentlicht hat.
+
 =zu den Kontakten hinzufügen=
 Hier kann man das Mitglied außerdem zur eigenen Kontaktliste hinzufügen (und es natürlich auch wieder von dieser entfernen). Bitte beachte, dass man nur an Mitglieder delegieren kann, die man auf die eigene Kontaktliste gesetzt hat.
+
+=Gliederungen und Themenbereiche=
+Hier kann man sehen, in welchen Gliederungen das Mitglied stimmberechtigt ist und an welchen Themenbereichen in diesen Gliederungen es teilnimmt.
+
+=Letzte Ereignisse=
+Zeigt, was das Mitglied in letzter Zeit gemacht hat.
+
+=Offene Themen=
+Zeigt offene Themen, an denen das Mitglied in irgendeiner Form beteiligt ist.
+
+=Geschlossene Themen=
+Zeigt geschlossene Themen, an denen das Mitglied in irgendeiner Form beteiligt ist.
+
+=Kontakte=
+Zeigt die Kontakte des Mitglieds. Es werden allerdings nur die Kontakte angezeigt, die das Mitglied auf öffentlich gesetzt hat.

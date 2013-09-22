@@ -1,15 +1,19 @@
-execute.view{ module = "index", view = "_lang_chooser" }
-
 ui.title(_"Reset password")
 
 ui.actions(function()
   ui.link{
-    content = function()
-        slot.put(_"Cancel")
-    end,
     module = "index",
-    view = "login"
+    view = "login",
+    text = _"Cancel"
   }
+  if config.send_login then
+    slot.put(" &middot; ")
+    ui.link{
+      module = "index",
+      view = "send_login",
+      text = _"Forgot login name?"
+    }
+  end
 end)
 
 
@@ -17,28 +21,19 @@ local secret = param.get("secret")
 
 if not secret then
   ui.tag{
-    tag = 'p',
-    content = _'Please enter your login name. You will receive an email with a link to reset your password.'
+    tag = "p",
+    content = _"Please enter your login name! You will receive an email with a link to reset your password. Note that your login name might be distinct from your screen name!"
   }
   ui.form{
     attr = { class = "vertical" },
     module = "index",
     action = "reset_password",
-    routing = {
-      ok = {
-        mode = "redirect",
-        module = "index",
-        view = "index"
-      }
-    },
     content = function()
-      ui.field.text{ 
-        label = _"login name",
+      ui.field.text{
+        label = _"Login name",
         name = "login"
       }
       ui.submit{ text = _"Request password reset link" }
-      slot.put("&nbsp;&nbsp;")
-      ui.link{ module = "index", view = "send_login", text = _"Forgot login name?" }
     end
   }
 
@@ -52,13 +47,13 @@ else
       ok = {
         mode = "redirect",
         module = "index",
-        view = "index"
+        view = "login"
       }
     },
     content = function()
       ui.tag{
-        tag = 'p',
-        content = _'Please enter the email reset code you have received:'
+        tag = "p",
+        content = _"Please enter the reset code you have received by email:"
       }
       ui.field.text{
         label = _"Reset code",
@@ -67,7 +62,7 @@ else
       }
       ui.tag{
         tag = 'p',
-        content = _'Please enter your new password twice.'
+        content = _'Please enter your new password twice:'
       }
       ui.field.password{
         label = "New password",

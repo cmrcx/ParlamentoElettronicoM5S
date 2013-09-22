@@ -128,26 +128,6 @@ Member:add_reference{
 
 Member:add_reference{
   mode          = '1m',
-  to            = "Delegation",
-  this_key      = 'id',
-  that_key      = 'truster_id',
-  ref           = 'outgoing_delegations',
-  back_ref      = 'truster',
-  default_order = '"id"'
-}
-
-Member:add_reference{
-  mode          = '1m',
-  to            = "Delegation",
-  this_key      = 'id',
-  that_key      = 'trustee_id',
-  ref           = 'incoming_delegations',
-  back_ref      = 'trustee',
-  default_order = '"id"'
-}
-
-Member:add_reference{
-  mode          = '1m',
   to            = "DirectVoter",
   this_key      = 'id',
   that_key      = 'member_id',
@@ -261,9 +241,6 @@ function Member:build_selector(args)
   if args.active ~= nil then
     selector:add_where{ "member.active = ?", args.active }
   end
-  if args.locked ~= nil then
-    selector:add_where{ "member.locked = ?", args.locked }
-  end
   if args.is_contact_of_member_id then
     selector:join("contact", "__model_member__contact", "member.id = __model_member__contact.other_member_id")
     selector:add_where{ "__model_member__contact.member_id = ?", args.is_contact_of_member_id }
@@ -271,10 +248,45 @@ function Member:build_selector(args)
   if args.voting_right_for_unit_id then
     selector:join("privilege", "__model_member__privilege", { "member.id = __model_member__privilege.member_id AND __model_member__privilege.voting_right AND __model_member__privilege.unit_id = ?", args.voting_right_for_unit_id })
   end
-  if args.admin_search then
+  -- admin search
+  if args.admin_search and args.admin_search ~= "" then
     local search_string = "%" .. args.admin_search .. "%"
-    selector:add_where{ "member.identification ILIKE ? OR member.name ILIKE ?", search_string, search_string }
+    selector:add_where{
+      "member.identification ILIKE ? OR member.name ILIKE ? OR member.login ILIKE ? OR member.realname ILIKE ? OR member.notify_email ILIKE ? OR member.email ILIKE ?",
+      search_string, search_string, search_string, search_string, search_string, search_string
+    }
   end
+  if     args.admin_search_admin == 1 then
+    selector:add_where{ "member.admin = TRUE" }
+  elseif args.admin_search_admin == 2 then
+    selector:add_where{ "member.admin = FALSE" }
+  end
+  if     args.admin_search_imported == 1 then
+    selector:add_where{ "member.identification LIKE 'import-%'" }
+  elseif args.admin_search_imported == 2 then
+    selector:add_where{ "member.identification IS NULL OR member.identification NOT LIKE 'import-%'" }
+  end
+  if     args.admin_search_activated == 1 then
+    selector:add_where{ "member.activated IS NOT NULL" }
+  elseif args.admin_search_activated == 2 then
+    selector:add_where{ "member.activated IS NULL" }
+  end
+  if     args.admin_search_locked == 1 then
+    selector:add_where{ "member.locked = TRUE" }
+  elseif args.admin_search_locked == 2 then
+    selector:add_where{ "member.locked = FALSE" }
+  end
+  if     args.admin_search_locked_import == 1 then
+    selector:add_where{ "member.locked_import = TRUE" }
+  elseif args.admin_search_locked_import == 2 then
+    selector:add_where{ "member.locked_import = FALSE" }
+  end
+  if     args.admin_search_active == 1 then
+    selector:add_where{ "member.active = TRUE" }
+  elseif args.admin_search_active == 2 then
+    selector:add_where{ "member.active = FALSE" }
+  end
+  -- order
   if args.order then
     if args.order == "id" then
       selector:add_order_by("id")
@@ -295,7 +307,7 @@ end
 
 function Member.object:set_password(password)
   trace.disable()
-  
+
   local hash_prefix
   local salt_length
 
@@ -305,24 +317,24 @@ function Member.object:set_password(password)
       config.password_hash_max_rounds
     )
   end
-      
+
   if config.password_hash_algorithm == "crypt_md5" then
-    hash_prefix = "$1$" 
+    hash_prefix = "$1$"
     salt_length = 8
-    
+
   elseif config.password_hash_algorithm == "crypt_sha256" then
     hash_prefix = "$5$rounds=" .. rounds() .. "$"
     salt_length = 16
-    
+
   elseif config.password_hash_algorithm == "crypt_sha512" then
     hash_prefix = "$6$rounds=" .. rounds() .. "$"
     salt_length = 16
-    
+
   else
     error("Unknown hash algorithm selected in configuration")
 
   end
-  
+
   hash_prefix = hash_prefix .. multirand.string(
     salt_length,
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz./"
@@ -333,7 +345,7 @@ function Member.object:set_password(password)
   if not hash or hash:sub(1, #hash_prefix) ~= hash_prefix then
     error("Password hashing algorithm failed")
   end
-  
+
   self.password = hash
 end
 
@@ -346,7 +358,7 @@ function Member.object:check_password(password)
 end
 
 function Member.object_get:password_hash_needs_update()
-  
+
   if self.password == nil then
     return nil
   end
@@ -354,8 +366,8 @@ function Member.object_get:password_hash_needs_update()
   local function check_rounds(rounds)
     if rounds then
       rounds = tonumber(rounds)
-      if 
-        rounds >= config.password_hash_min_rounds and 
+      if
+        rounds >= config.password_hash_min_rounds and
         rounds <= config.password_hash_max_rounds
       then
         return false
@@ -363,15 +375,15 @@ function Member.object_get:password_hash_needs_update()
     end
     return true
   end
-  
+
   if config.password_hash_algorithm == "crypt_md5" then
 
     return self.password:sub(1,3) ~= "$1$"
-    
+
   elseif config.password_hash_algorithm == "crypt_sha256" then
-    
+
     return check_rounds(self.password:match("^%$5%$rounds=([1-9][0-9]*)%$"))
-    
+
   elseif config.password_hash_algorithm == "crypt_sha512" then
 
     return check_rounds(self.password:match("^%$6%$rounds=([1-9][0-9]*)%$"))
@@ -380,7 +392,7 @@ function Member.object_get:password_hash_needs_update()
     error("Unknown hash algorithm selected in configuration")
 
   end
-  
+
 end
 
 function Member.object_get:published_contacts()
@@ -392,12 +404,10 @@ function Member.object_get:published_contacts()
 end
 
 function Member:by_login_and_password(login, password)
-  local selector = self:new_selector()
-  selector:add_field({ "now() > COALESCE(last_delegation_check, activated) + ?::interval", config.check_delegations_interval_hard }, "needs_delegation_check_hard")
-  selector:add_where{'"login" = ?', login }
-  selector:add_where('NOT "locked"')
-  selector:optional_object_mode()
-  local member = selector:exec()
+  local member = self:new_selector()
+    :add_where{'"login" = ?', login }
+    :optional_object_mode()
+    :exec()
   if member and member:check_password(password) then
     return member
   else
@@ -406,47 +416,53 @@ function Member:by_login_and_password(login, password)
 end
 
 function Member:by_login(login)
-  local selector = self:new_selector()
-  selector:add_where{'"login" = ?', login }
-  selector:optional_object_mode()
-  return selector:exec()
+  return self:new_selector()
+    :add_where{'"login" = ?', login }
+    :optional_object_mode()
+    :exec()
 end
 
 function Member:by_name(name)
-  local selector = self:new_selector()
-  selector:add_where{'"name" = ?', name }
-  selector:optional_object_mode()
-  return selector:exec()
+  return self:new_selector()
+    :add_where{'"name" = ?', name }
+    :optional_object_mode()
+    :exec()
 end
 
 function Member:get_search_selector(search_string)
   return self:new_selector()
     :add_field( {'"highlight"("member"."name", ?)', search_string }, "name_highlighted")
-    :add_where{ '"member"."text_search_data" @@ "text_search_query"(?)', search_string }
+    :add_where{
+      '"member"."text_search_data" @@ "text_search_query"(?) OR member.email ILIKE ?',
+      search_string, "%" .. search_string .. "%"
+    }
     :add_where("activated NOTNULL AND active")
 end
 
 function Member.object:send_invitation(template_file, subject)
   trace.disable()
   self.invite_code = multirand.string( 24, "23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz" )
+  if config.invite_code_expiry then
+    self.invite_code_expiry = db:query("SELECT now() + '" .. config.invite_code_expiry .. "'::interval as expiry", "object").expiry
+  end
   self:save()
-  
+
   local subject = subject
   local content
-  
+
   if template_file then
     local fh = io.open(template_file, "r")
     content = fh:read("*a")
     content = (content:gsub("#{invite_code}", self.invite_code))
   else
-    subject = config.mail_subject_prefix .. _"Invitation to LiquidFeedback"
+    subject = config.mail_subject_prefix .. _"Invitation to Parlamento Elettronico M5S"
     content = slot.use_temporary(function()
-      slot.put(_"Hello\n\n")
-      slot.put(_"You are invited to LiquidFeedback. To register please click the following link:\n\n")
+      slot.put(_"Hello!" .. "\n\n")
+      slot.put(_"You are invited to Parlamento Elettronico M5S. To register please click the following link:" .. "\n\n")
       slot.put(request.get_absolute_baseurl() .. "index/register.html?invite=" .. self.invite_code .. "\n\n")
-      slot.put(_"If this link is not working, please open following url in your web browser:\n\n")
+      slot.put(_"If this link is not working, please open following url in your web browser:" .. "\n\n")
       slot.put(request.get_absolute_baseurl() .. "index/register.html\n\n")
-      slot.put(_"On that page please enter the invite key:\n\n")
+      slot.put(_"On that page please enter the invite key:" .. "\n\n")
       slot.put(self.invite_code .. "\n\n")
     end)
   end
@@ -470,12 +486,12 @@ function Member.object:set_notify_email(notify_email)
   self.notify_email_secret = multirand.string( 24, "23456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz" )
   self.notify_email_secret_expiry = expiry
   local content = slot.use_temporary(function()
-    slot.put(_"Hello " .. self.name .. ",\n\n")
-    slot.put(_"Please confirm your email address by clicking the following link:\n\n")
+    slot.put(_("Hello #{name}!", { name = self.name }) .. "\n\n")
+    slot.put(_"Please confirm your email address by clicking the following link:" .. "\n\n")
     slot.put(request.get_absolute_baseurl() .. "index/confirm_notify_email.html?secret=" .. self.notify_email_secret .. "\n\n")
-    slot.put(_"If this link is not working, please open following url in your web browser:\n\n")
+    slot.put(_"If this link is not working, please open following url in your web browser:" .. "\n\n")
     slot.put(request.get_absolute_baseurl() .. "index/confirm_notify_email.html\n\n")
-    slot.put(_"On that page please enter the confirmation code:\n\n")
+    slot.put(_"On that page please enter the confirmation code:" .. "\n\n")
     slot.put(self.notify_email_secret .. "\n\n")
   end)
   local success = net.send_mail{
@@ -620,12 +636,9 @@ function Member.object:get_login_data(mode)
   return selector:exec()
 end
 
-function Member.object:get_delegatee_member(unit_id, area_id, issue_id)
-  local selector = Member:new_selector()
-  if unit_id then
-    selector:join("delegation", nil, { "delegation.trustee_id = member.id AND delegation.scope = 'unit' AND delegation.unit_id = ? AND delegation.truster_id = ?", unit_id, self.id })
-  end
-  selector:optional_object_mode()
-  return selector:exec()
+-- count direct weight
+function Member:count_string(members_selector)
+  local tmp = db:query("SELECT count(1) AS count FROM (" .. tostring(members_selector) .. ") as subquery", "object")
+  local direct_count = tmp.count
+  return " (" .. tostring(direct_count) .. ")"
 end
-

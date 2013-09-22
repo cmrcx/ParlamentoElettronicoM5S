@@ -92,15 +92,6 @@ Issue:add_reference{
 }
 
 Issue:add_reference{
-  mode          = '1m',
-  to            = "Delegation",
-  this_key      = 'id',
-  that_key      = 'issue_id',
-  ref           = 'delegations',
-  back_ref      = 'issue'
-}
-
-Issue:add_reference{
   mode                  = 'mm',
   to                    = "Member",
   this_key              = 'id',
@@ -120,6 +111,17 @@ Issue:add_reference{
   connected_by_this_key = 'issue_id',
   connected_by_that_key = 'member_id',
   ref                   = 'interested_members_snapshot'
+}
+
+Issue:add_reference{
+  mode                  = 'mm',
+  to                    = "Member",
+  this_key              = 'id',
+  that_key              = 'id',
+  connected_by_table    = 'direct_population_snapshot',
+  connected_by_this_key = 'issue_id',
+  connected_by_that_key = 'member_id',
+  ref                   = 'populating_members_snapshot'
 }
 
 Issue:add_reference{
@@ -155,19 +157,20 @@ Issue:add_reference{
     end
     sub_selector:from("issue")
     sub_selector:add_field("issue.id", "issue_id")
-    sub_selector:add_field{ '(delegation_info(?, null, null, issue.id, ?)).*', options.member_id, options.trustee_id }
+    --sub_selector:add_field{ '(delegation_info(?, null, null, issue.id)).*', options.member_id }
+    sub_selector:left_join("interest", nil, { "interest.issue_id = issue.id AND interest.member_id = ?", options.member_id })
+    sub_selector:add_field("interest.member_id NOTNULL", "own_participation")
+    sub_selector:add_field("interest.member_id", "participating_member_id")
     sub_selector:add_where{ 'issue.id IN ($)', ids }
 
     local selector = Issue:get_db_conn():new_selector()
     selector:add_from("issue")
     selector:join(sub_selector, "delegation_info", "delegation_info.issue_id = issue.id")
-    selector:left_join("member", "first_trustee", "first_trustee.id = delegation_info.first_trustee_id")
-    selector:left_join("member", "other_trustee", "other_trustee.id = delegation_info.other_trustee_id")
     selector:add_field("delegation_info.*")
-    selector:add_field("first_trustee.name", "first_trustee_name")
-    selector:add_field("other_trustee.name", "other_trustee_name")
     selector:left_join("direct_voter", nil, { "direct_voter.issue_id = issue.id AND direct_voter.member_id = ?", options.member_id })
     selector:add_field("direct_voter.member_id NOTNULL", "direct_voted")
+    --selector:left_join("delegating_voter", nil, { "delegating_voter.issue_id = issue.id AND delegating_voter.member_id = ?", options.member_id })
+    --selector:add_field("delegating_voter.delegate_member_id", "voted_delegate_member_id")
     selector:left_join("non_voter", nil, { "non_voter.issue_id = issue.id AND non_voter.member_id = ?", options.member_id })
     selector:add_field("non_voter.member_id NOTNULL", "non_voter")
     return selector
@@ -196,8 +199,6 @@ function Issue.object:load_everything_for_member_id(member_id)
   initiatives:load_everything_for_member_id(member_id)
 end
 
-
-
 function Issue:get_state_name_for_state(value)
   local state_name_table = {
     admission = _"New",
@@ -216,13 +217,12 @@ function Issue:get_state_name_for_state(value)
   return state_name_table[value] or value or ''
 end
 
-
-
 function Issue:get_search_selector(search_string)
   return self:new_selector()
     :join('"initiative"', nil, '"initiative"."issue_id" = "issue"."id"')
     :join('"draft"', nil, '"draft"."initiative_id" = "initiative"."id"')
     :add_where{ '"initiative"."text_search_data" @@ "text_search_query"(?) OR "draft"."text_search_data" @@ "text_search_query"(?)', search_string, search_string }
+    :add_order_by('"issue"."id" DESC')
     :add_group_by('"issue"."id"')
     :add_group_by('"issue"."area_id"')
     :add_group_by('"issue"."policy_id"')
