@@ -175,7 +175,6 @@ div.syserr a {
   background-color: #444;
   color: #fff;
   border: none;
-  border-radius: 4px;
   padding: 0.75ex;
 }
 
@@ -226,7 +225,6 @@ div.notifications,
   padding: 0.3em 1em;
   margin: 2ex 1% 2ex 1%;
   border: 1px solid #777;
-  border-radius: 8px;
 }
 .slot_notice {
   background-color: #cfc;
@@ -323,7 +321,6 @@ div.notifications,
   top: 100%;
   left: 0;
   z-index: 3;
-  border-radius: 0 0 8px 8px;
   background: #000;
 }
 #language_menu ul li {
@@ -343,7 +340,6 @@ div.notifications,
 }
 #language_menu li li a {
   background: #000;
-  border-radius: 5px;
   color: #fff;
 }
 #language_menu ul li:hover a {
@@ -367,10 +363,6 @@ div.notifications,
   margin: 0px 1% 2ex 1%;
   border: 1px solid #555;
   border-top: none;
-  border-radius: 0 0 8px 8px;
-}
-.slot_head > div:last-child {
-  border-radius: 0 0 8px 8px;
 }
 .page_head .title,
 .issue .context,
@@ -485,17 +477,10 @@ div.notifications,
 .unit_head, .area_head {
   min-height: 2.2em;
 }
-.unit_head:last-child {
-  border-radius: 0 0 8px 8px;
-}
-.area_head:last-child {
-  border-radius: 0 0 8px 8px;
-}
 .unit_link, .area_link, .issue_link, .ini_link {
   float: left;
   margin: 7px 8px 0 0;
   padding: 5px 5px 3px 5px;
-  border-radius: 5px;
   text-decoration: none;
 }
 .unit_link {
@@ -560,7 +545,6 @@ div.notifications,
   background-color: #444;
   color: #f7f7f7;
   white-space: nowrap;
-  border-radius: 8px;
   font-size: 115%;
   font-weight: bold;
   margin: 2px;
@@ -607,7 +591,6 @@ div.notifications,
   margin-right: 0;
   background-color: #fff;
   padding: 0.4ex 0.5em 0.3ex 0.5em;
-  border-radius: 5px;
   border: 1px solid #bbb;
 }
 .ui_filter_head a.active {
@@ -643,7 +626,6 @@ div.voter .ui_filter {
 }
 .ui_paginate_select a {
   padding: 0.3em 0.4em;
-  border-radius: 4px;
   line-height: 22px;
 }
 .ui_paginate_select a:hover {
@@ -885,7 +867,6 @@ div.ui_field_multiline span {
 
 .area_list {
   border: 1px solid #444;
-  border-radius: 10px;
   margin-top: 2ex;
 }
 .area_list .area_head {
@@ -893,20 +874,6 @@ div.ui_field_multiline span {
 }
 .area_list .area_head:first-child {
   border-top: none;
-}
-.area_list .unit_head {
-  border-radius: 8px 8px 0 0;
-}
-.area_list .unit_head:last-child {
-  border-radius: 8px;
-}
-.area_list .area_head:last-child {
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-}
-.area_list .area_head:first-child {
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
 }
 
 /*************************************************************************
@@ -920,7 +887,6 @@ div.ui_field_multiline span {
 .issues .issue {
   overflow: hidden;
   border: 1px solid #777;
-  border-radius: 8px;
   margin-bottom: 1ex;
 }
 .issue.interested {
@@ -949,7 +915,6 @@ div.ui_field_multiline span {
   background-color: #444;
   color: #fff;
   font-style: italic;
-  border-radius: 8px 0 0 8px;
 }
 .event_info a {
   color: #fff;
@@ -973,7 +938,6 @@ div.ui_field_multiline span {
   background: linear-gradient(#888, #222);
   background-color: #444;
   color: #fff;
-  border-radius: 8px;
   font-weight: bold;
 }
 
@@ -982,7 +946,6 @@ div.ui_field_multiline span {
     width: auto;
     margin-left: 8px;
     margin-right: 8px;
-    border-radius: 8px 8px 0 0;
   }
   .events .issue {
     clear: left;
@@ -1085,15 +1048,8 @@ th.opinion {
  * members
  */
 
-.member_image_photo {
-  border-radius: 8px;
-}
-.member_image_avatar {
-  border-radius: 7px;
-}
 .micro_avatar {
   height: 24px;
-  border-radius: 4px;
   vertical-align: middle;
 }
 
@@ -1117,7 +1073,6 @@ th.opinion {
   background-color: #fff;
   overflow: hidden;
   position: relative;
-  border-radius: 8px;
   padding: 2px;
   border: 1px solid #aaa;
 }
@@ -1148,7 +1103,6 @@ th.opinion {
   padding: 0;
   margin: 0;
   vertical-align: bottom;
-  border-radius: 7px;
 }
 .member_thumb .member_name {
   position: absolute;
@@ -1243,7 +1197,6 @@ th.opinion {
 
 .help,
 .use_terms {
-  border-radius: 8px;
   border: 1px solid #ffe900;
   background-color: #fffbce;
   color: #000;
@@ -1338,7 +1291,6 @@ a.not_voted {
   margin-bottom: 3ex;
   padding: 1ex;
   padding-bottom: 2ex;
-  border-radius: 8px;
 }
 #voting .approval {
   background-color: #9f9;
@@ -1366,7 +1318,6 @@ a.not_voted {
   border: 1px black solid;
   margin-top: 1ex;
   padding: 0.5ex;
-  border-radius: 8px;
 }
 #voting .voting_form_active .movable {
   cursor: pointer;
@@ -1386,13 +1337,6 @@ a.not_voted {
  * contents marks
  */
 
-.member_statement,
-.suggestion_content,
-.initiative_head,
-.box,
-div.notifications {
-  border-radius: 8px;
-}
 .member_statement,
 .suggestion_content,
 .initiative_head,
