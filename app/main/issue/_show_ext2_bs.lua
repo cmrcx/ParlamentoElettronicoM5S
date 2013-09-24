@@ -24,11 +24,11 @@ local voteable = app.session.member_id and issue.state == 'voting' and
 local vote_comment_able = app.session.member_id and issue.closed and direct_voter
 
 local vote_link_text
-if voteable then 
+if voteable then
   vote_link_text = direct_voter and _"Change vote" or _"Vote now"
 elseif vote_comment_able then
   vote_link_text = direct_voter and _"Update voting comment"
-end  
+end
 
 
 -- Uncomment the following to use svgz instead of svg
@@ -43,7 +43,7 @@ ui.container{ attr = { class = "row-fluid"}, content = function()
         execute.view{ module = "issue", view = "info_box", params={issue=issue}  }
       end }
       ui.container{ attr = { class = "span9"}, content = function()
-        execute.view{ module = "issue", view = "phasesbar", params = { state=issue.state } }       
+        execute.view{ module = "issue", view = "phasesbar", params = { state=issue.state } }
       end }
 
     end }
@@ -55,7 +55,7 @@ ui.container{ attr = { class = "row-fluid"}, content = function()
         ui.container{ attr = { class = "row-fluid"}, content = function()
           ui.container{ attr = { class = "span12"}, content = function()
             ui.tag{tag="strong",content=function()
-              ui.heading { level=5, content = "Q"..issue.id.." - "..issue.title or _"No title for this issue" }
+              ui.heading { level=5, content = "Q" .. issue.id .. " - " .. (issue.title or _"No title for this issue!") }
             end }
           end }
         end }
@@ -65,15 +65,7 @@ ui.container{ attr = { class = "row-fluid"}, content = function()
             execute.view{ module = "issue", view = "info_data", params = { issue = issue } }
           end }
         end }
-    
-        --[[
-        ui.container{ attr = { class = "row-fluid"}, content = function()
-          ui.container{ attr = { class = "span12"}, content = function()
-            execute.view{ module = "delegation", view = "_info", params = { issue = issue, member = for_member } }
-          end }
-        end }
-        --]]
-    
+
         ui.container{ attr = { class = "row-fluid"}, content = function()
           ui.container{ attr = { class = "span12"}, content = function()
             ui.tag { tag="p", attr = { class="issue_brief_description" }, content = issue.brief_description or _"No description available" }
@@ -81,19 +73,19 @@ ui.container{ attr = { class = "row-fluid"}, content = function()
         end }
 
 --        local links = {}
-      
+
         ui.container{ attr = { class = "row-fluid spaceline2"}, content = function()
           ui.container{ attr = { class = "span12"}, content = function()
             local content
             if #issue.initiatives == 1 then
-              content= #issue.initiatives.._" INITIATIVE TO RESOLVE THE ISSUE"  
+              content= #issue.initiatives.._" INITIATIVE TO RESOLVE THE ISSUE"
             else
-              content= #issue.initiatives.._" INITIATIVES TO RESOLVE THE ISSUE" 
+              content= #issue.initiatives.._" INITIATIVES TO RESOLVE THE ISSUE"
             end
             ui.heading{ level=5, attr = { class = "alert head-chocolate uppercase inline-block"}, content = content }
           end }
         end }
-    
+
         ui.container{attr = {class="row-fluid"}, content =function()
           ui.container{attr = {class="span12 depression_box"}, content =function()
             local initiatives_selector = issue:get_reference_selector("initiatives")
@@ -118,7 +110,7 @@ ui.container{ attr = { class = "row-fluid"}, content = function()
             }
           end }
         end }
-    
+
         ui.container{attr = {class="row-fluid"}, content =function()
           ui.container{attr = {class="span8"}, content =function()
             if app.session.member_id and direct_voter then
@@ -131,23 +123,23 @@ ui.container{ attr = { class = "row-fluid"}, content = function()
                       ui.tag{tag = "p", attr = {class="issue_vote_txt"}, content = _"YES" }
                       ui.image{ static="svg/thumb_up.svg"..svgz, attr= { class = "thumb"}  }
                     end}
-                  else 
+                  else
                     ui.container{attr = {class="issue_thumb_cont_down"}, content =function()
                       ui.tag{tag = "p", attr = {class="issue_vote_txt"}, content = _"NO" }
                       ui.image{ static="svg/thumb_down.svg"..svgz, attr= { class = "thumb"}  }
                     end}
-                  end   
+                  end
                 end
               }
             end
           end }
           ui.container{attr = {class="span4"}, content =function()
-            ui.link{ 
+            ui.link{
               attr = { id = "issue_see_det_"..issue.id, class = "btn btn-primary btn-large pull-right issue_see_det_btn" },
               module = "issue",
               view = "show_ext_bs",
               id = issue.id,
-              params = { 
+              params = {
                 view="area",
                 state = state,
                 orderby = orderby,

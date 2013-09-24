@@ -15,7 +15,7 @@ config.gui_preset = {
   default = {
     name = "default",
     start_page = "_index_default"
-  }, 
+  },
   M5S_bs = {
     name = "M5S_bs",
     start_page = "_welcome_bs",
@@ -78,7 +78,7 @@ config.use_terms_checkboxes = {
 --  }
 }
 
-  
+
 -- Absolute base url of application
 -- ------------------------------------------------------------------------
 config.absolute_base_url = "/lf"
@@ -89,9 +89,9 @@ config.absolute_base_url = "/lf"
 config.database = { engine='postgresql', dbname='liquid_feedback' }
 config.secure_database = { engine='postgresql', dbname='liquid_feedback' }
 --[[
-config.secure_database = { 
-  engine='postgresql', 
-  dbname='liquid_feedback', 
+config.secure_database = {
+  engine='postgresql',
+  dbname='liquid_feedback',
   conninfo='',
   host='',
   hostaddr='',
@@ -113,15 +113,15 @@ config.formatting_engine_executeables = {
 -- Public access level
 -- ------------------------------------------------------------------------
 -- Available options:
--- "none" 
+-- "none"
 --     -> Closed user group, no public access at all
 --        (except login/registration/password reset)
 -- "anonymous"
 --     -> Shows only initiative/suggestions texts and aggregated
 --        supporter/voter counts
--- "authors_pseudonymous" 
+-- "authors_pseudonymous"
 --     -> Like anonymous, but shows screen names of authors
--- "all_pseudonymous" 
+-- "all_pseudonymous"
 --     -> Show everything a member can see, except profile pages
 -- "everything"
 --     -> Show everything a member can see, including profile pages
@@ -142,11 +142,6 @@ config.public_access = "none"
 -- Default language, defaults to "en"
 -- ------------------------------------------------------------------------
 config.default_lang = "it"
-
--- after how long is a user considered inactive and the trustee will see warning,
--- notation is according to postgresql intervals, default: no warning at all
--- ------------------------------------------------------------------------
--- config.delegation_warning_time = '6 months'
 
 -- Prefix of all automatic mails, defaults to "[Liquid Feedback] "
 -- ------------------------------------------------------------------------
@@ -246,7 +241,7 @@ config.free_timing = {
     }
   end,
   available_func = function(policy)
-    return { 
+    return {
       { name = "End of 2013", id = '2013-12-31' },
       { name = "End of 2014", id = '2014-12-31' },
       { name = "End of 2015", id = '2015-12-31' }

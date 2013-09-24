@@ -11,7 +11,6 @@ end
 
 local member = app.session.member
 areas_selector = Area:build_selector{ active = true }
-areas_selector:add_order_by("member_weight DESC")
 
 if filter == "my_areas" then
   areas_selector:join("membership", nil, { "membership.area_id = area.id AND membership.member_id = ?", member.id })
@@ -89,27 +88,27 @@ if filter == "my_areas" then
 else
   btn1=btn_class_active
 end
-  
+
 
 ui.container{ attr = { class="row-fluid"}, content=function()
   ui.container{ attr = { class ="span12 well" }, content = function()
     ui.container{ attr = { class ="row-fluid" }, content = function()
-      ui.tag { 
-        tag = "h3", 
-        attr = { class  = "span12 text-center"  }, 
-        content = _(config.gui_preset[gui_preset].units[unit_name].unit_title) or _"THEMATIC AREAS" 
+      ui.tag {
+        tag = "h3",
+        attr = { class  = "span12 text-center"  },
+        content = _(config.gui_preset[gui_preset].units[unit_name].unit_title) or _"THEMATIC AREAS"
       }
     end }
     ui.container{ attr = { class ="row-fluid" }, content = function()
       ui.container{attr={class="span4 offset2"},content=function()
-        ui.link { 
-          attr = { class=btn1  }, 
+        ui.link {
+          attr = { class=btn1  },
           module = "wizard",
           view = "show_ext_bs",
           id = unit_id,
           content = function()
             ui.heading{level=3, attr={class="fittext1"}, content= _"SHOW ALL AREAS"}
-          end 
+          end
         }
       end }
       ui.container{attr={class="span4 offset1"},content=function()
@@ -121,17 +120,17 @@ ui.container{ attr = { class="row-fluid"}, content=function()
           params = { filter = "my_areas"},
           content = function()
             ui.heading{level=3, attr={class="fittext1"}, content= _"SHOW ONLY PARTECIPATED AREAS"}
-          end 
+          end
         }
       end }
     end }
-    ui.container{ attr = { class="row-fluid"}, content=function() 
+    ui.container{ attr = { class="row-fluid"}, content=function()
       ui.container{ attr = { class ="span2" }, content = ""}
     end }
-    
-   
+
+
     ui.container{ attr = { class="row-fluid"}, content=function()
-      execute.view{  
+      execute.view{
         module = "wizard",
         view = "_list_ext_bs",
         params = { areas_selector = areas_selector, member = app.session.member }

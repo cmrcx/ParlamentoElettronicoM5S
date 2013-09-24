@@ -62,7 +62,7 @@ ui.container{attr={class="row-fluid"}, content=function()
         ui.container{attr={class="row-fluid"}, content=function()
           ui.container{attr={class="span12 nowrap"}, content=function()
             ui.heading{level=6,attr={class=""},content=_"Issue link (copy the link and share to the web):"}
-            slot.put("<input id='issue_url_box' type='text' value="..url..">") 
+            slot.put("<input id='issue_url_box' type='text' value="..url..">")
             ui.script{static="js/jquery.select_popover.js"}
 
             ui.tag{
@@ -120,7 +120,7 @@ ui.container{attr={class="row-fluid"}, content=function()
     ui.container{ attr = { class = "row-fluid"}, content = function()
       ui.container{ attr = { class = "span12"}, content = function()
         ui.tag{tag="strong",content=function()
-          ui.heading { level=5, content = "Q"..issue.id.." - "..issue.title or _"No title for the issue!" }
+          ui.heading { level=5, content = "Q" .. issue.id .. " - " .. (issue.title or _"No title for the issue!") }
         end }
       end }
     end }
@@ -145,7 +145,7 @@ ui.container{attr={class="row-fluid"}, content=function()
     if issue.state == "admission" then
       ui.container{ attr = { class = "row-fluid spaceline2"}, content = function()
         ui.container{ attr = { class = "span12"}, content = function()
-            ui.heading{ level=5, attr = { class = "uppercase" }, content = function() 
+            ui.heading{ level=5, attr = { class = "uppercase" }, content = function()
               ui.tag{content=_"Time limit to reach the supporters quorum:"}
               ui.tag{tag="strong",content="  "..format.interval_text(issue.state_time_left, { mode = "time_left" }) }
             end }
@@ -244,13 +244,13 @@ ui.container{attr={class="row-fluid"}, content=function()
                 else
                   content= _"initiatives"
                 end
-    
+
                 ui.tag{content=function()
-                  
+
                   slot.put( _("Vi sono attualmente <strong>#{count}</strong> proposte per risolvere la questione sollevata. Decidi a quale dare il tuo sostegno o presenta una proposta tua. Almeno una proposta tra quelle presentate deve raggiungere il quorum di sostenitori entro <strong>#{days}</strong> affinche' la questione venga ammessa alla fase successiva.",{ count=#issue.initiatives, days=format.interval_text(issue.state_time_left)}) )
                 end }
               end }
-    
+
               ui.container{ attr = { class = "span4"}, content = function()
                 ui.link{
                   attr = { class="btn btn-primary spaceline btn_box_bottom fixclick"  },
@@ -272,11 +272,11 @@ ui.container{attr={class="row-fluid"}, content=function()
             end }
           end }
         end }
-		
+
 
         ui.container{attr = {class="row-fluid"}, content =function()
           local quorum_percent = issue.policy.issue_quorum_num * 100 / issue.policy.issue_quorum_den
-          local quorum_supporters  
+          local quorum_supporters
           if issue.population and issue.population > 0 then
             quorum_supporters = math.floor(issue.population * quorum_percent / 100)
           else
@@ -323,7 +323,7 @@ ui.container{attr={class="row-fluid"}, content=function()
 
           end }
         end }
-		
+
 
         ui.container{attr = {class="row-fluid spaceline2"}, content =function()
           ui.container{attr = {class="span12 initiative_list_box"}, content =function()
