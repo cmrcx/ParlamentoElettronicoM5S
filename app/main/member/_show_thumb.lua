@@ -24,10 +24,6 @@ if member.is_informed == false then
   container_class = container_class .. " not_informed"
 end
 
-if highlight or ((issue or initiative) and member.id == app.session.member_id) then
-  container_class = container_class .. " in_delegation_chain"
-end
-
 ui.container{
   attr = { class = container_class },
   content = function()

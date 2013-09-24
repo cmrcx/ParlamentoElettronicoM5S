@@ -7,10 +7,6 @@ local member = param.get("member", "table")
 local show_content = param.get("show_content", atom.boolean)
 local for_listing = param.get("for_listing", atom.boolean)
 
-if app.session.member_id then
-  --area:load_delegation_info_once_for_member_id(app.session.member_id)
-end
-
 if not param.get("hide_unit", atom.boolean) then
   execute.view{ module = "unit", view = "_head", params = { unit = area.unit, member = member } }
 end

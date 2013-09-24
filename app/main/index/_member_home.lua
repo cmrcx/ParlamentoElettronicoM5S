@@ -39,10 +39,6 @@ end
 
 local units = Unit:new_selector():add_where("active"):add_order_by("name"):exec()
 
-if member then
-  --units:load_delegation_info_once_for_member_id(member.id)
-end
-
 for i, unit in ipairs(units) do
   if member:has_voting_right_for_unit_id(unit.id) then
 
@@ -83,7 +79,6 @@ for i, unit in ipairs(units) do
       execute.view{ module = "unit", view = "_head", params = { unit = unit, show_content = true, member = member } }
 
       local areas = areas_selector:exec()
-      --areas:load_delegation_info_once_for_member_id(member.id)
       for i, area in ipairs(areas) do
         execute.view{
           module = "area",
